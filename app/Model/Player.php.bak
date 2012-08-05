@@ -1,0 +1,18 @@
+<?php
+class Player extends AppModel {
+	public $name = 'Player';
+	public $hasMany = array(
+		'Ranking' => array(
+			'className' => 'Ranking',
+			'foreignKey' => 'player_id'
+		),
+	);
+	public $hasAndBelongsToMany = array(
+		'Match' => array(
+			'className' => 'Match',
+			'joinTable' => 'matches_players',
+			'foreignKey' => 'player_id',
+			'associationForeignKey' => 'match_id'
+		)
+	);
+}

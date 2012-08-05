@@ -1,0 +1,10 @@
+<?php
+class Match extends AppModel {
+	public $name = 'Match';
+	public $belongsTo = array(
+		'Tournament' => array(
+			'className' => 'Tournament',
+			'foreignKey' => 'tournament_id'
+		),
+	);
+}

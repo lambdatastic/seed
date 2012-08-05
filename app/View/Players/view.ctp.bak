@@ -1,0 +1,186 @@
+<div class="players view">
+<h2><?php  echo __('Player'); ?></h2>
+	<dl>
+		<dt><?php echo __('Id'); ?></dt>
+		<dd>
+			<?php echo h($player['Player']['id']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Name'); ?></dt>
+		<dd>
+			<?php echo h($player['Player']['name']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('City'); ?></dt>
+		<dd>
+			<?php echo h($player['Player']['city']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('State'); ?></dt>
+		<dd>
+			<?php echo h($player['Player']['state']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Username'); ?></dt>
+		<dd>
+			<?php echo h($player['Player']['username']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Password'); ?></dt>
+		<dd>
+			<?php echo h($player['Player']['password']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Email'); ?></dt>
+		<dd>
+			<?php echo h($player['Player']['email']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Role'); ?></dt>
+		<dd>
+			<?php echo h($player['Player']['role']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Bio'); ?></dt>
+		<dd>
+			<?php echo h($player['Player']['bio']); ?>
+			&nbsp;
+		</dd>
+	</dl>
+</div>
+<div class="actions">
+	<h3><?php echo __('Actions'); ?></h3>
+	<ul>
+		<li><?php echo $this->Html->link(__('Edit Player'), array('action' => 'edit', $player['Player']['id'])); ?> </li>
+		<li><?php echo $this->Form->postLink(__('Delete Player'), array('action' => 'delete', $player['Player']['id']), null, __('Are you sure you want to delete # %s?', $player['Player']['id'])); ?> </li>
+		<li><?php echo $this->Html->link(__('List Players'), array('action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Player'), array('action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('List Rankings'), array('controller' => 'rankings', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Ranking'), array('controller' => 'rankings', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('List Matches'), array('controller' => 'matches', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Played As1'), array('controller' => 'matches', 'action' => 'add')); ?> </li>
+	</ul>
+</div>
+<div class="related">
+	<h3><?php echo __('Related Rankings'); ?></h3>
+	<?php if (!empty($player['Ranking'])): ?>
+	<table cellpadding = "0" cellspacing = "0">
+	<tr>
+		<th><?php echo __('Id'); ?></th>
+		<th><?php echo __('Player Id'); ?></th>
+		<th><?php echo __('Game'); ?></th>
+		<th><?php echo __('Rating'); ?></th>
+		<th><?php echo __('Rd'); ?></th>
+		<th class="actions"><?php echo __('Actions'); ?></th>
+	</tr>
+	<?php
+		$i = 0;
+		foreach ($player['Ranking'] as $ranking): ?>
+		<tr>
+			<td><?php echo $ranking['id']; ?></td>
+			<td><?php echo $ranking['player_id']; ?></td>
+			<td><?php echo $ranking['game']; ?></td>
+			<td><?php echo $ranking['rating']; ?></td>
+			<td><?php echo $ranking['rd']; ?></td>
+			<td class="actions">
+				<?php echo $this->Html->link(__('View'), array('controller' => 'rankings', 'action' => 'view', $ranking['id'])); ?>
+				<?php echo $this->Html->link(__('Edit'), array('controller' => 'rankings', 'action' => 'edit', $ranking['id'])); ?>
+				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'rankings', 'action' => 'delete', $ranking['id']), null, __('Are you sure you want to delete # %s?', $ranking['id'])); ?>
+			</td>
+		</tr>
+	<?php endforeach; ?>
+	</table>
+<?php endif; ?>
+
+	<div class="actions">
+		<ul>
+			<li><?php echo $this->Html->link(__('New Ranking'), array('controller' => 'rankings', 'action' => 'add')); ?> </li>
+		</ul>
+	</div>
+</div>
+<div class="related">
+	<h3><?php echo __('Related Matches'); ?></h3>
+	<?php if (!empty($player['PlayedAs1'])): ?>
+	<table cellpadding = "0" cellspacing = "0">
+	<tr>
+		<th><?php echo __('Id'); ?></th>
+		<th><?php echo __('Tournament Id'); ?></th>
+		<th><?php echo __('Player1 Id'); ?></th>
+		<th><?php echo __('Player2 Id'); ?></th>
+		<th><?php echo __('Video'); ?></th>
+		<th><?php echo __('Result'); ?></th>
+		<th><?php echo __('Created'); ?></th>
+		<th><?php echo __('Completed'); ?></th>
+		<th class="actions"><?php echo __('Actions'); ?></th>
+	</tr>
+	<?php
+		$i = 0;
+		foreach ($player['PlayedAs1'] as $playedAs1): ?>
+		<tr>
+			<td><?php echo $playedAs1['id']; ?></td>
+			<td><?php echo $playedAs1['tournament_id']; ?></td>
+			<td><?php echo $playedAs1['player1_id']; ?></td>
+			<td><?php echo $playedAs1['player2_id']; ?></td>
+			<td><?php echo $playedAs1['video']; ?></td>
+			<td><?php echo $playedAs1['result']; ?></td>
+			<td><?php echo $playedAs1['created']; ?></td>
+			<td><?php echo $playedAs1['completed']; ?></td>
+			<td class="actions">
+				<?php echo $this->Html->link(__('View'), array('controller' => 'matches', 'action' => 'view', $playedAs1['id'])); ?>
+				<?php echo $this->Html->link(__('Edit'), array('controller' => 'matches', 'action' => 'edit', $playedAs1['id'])); ?>
+				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'matches', 'action' => 'delete', $playedAs1['id']), null, __('Are you sure you want to delete # %s?', $playedAs1['id'])); ?>
+			</td>
+		</tr>
+	<?php endforeach; ?>
+	</table>
+<?php endif; ?>
+
+	<div class="actions">
+		<ul>
+			<li><?php echo $this->Html->link(__('New Played As1'), array('controller' => 'matches', 'action' => 'add')); ?> </li>
+		</ul>
+	</div>
+</div>
+<div class="related">
+	<h3><?php echo __('Related Matches'); ?></h3>
+	<?php if (!empty($player['PlayedAs2'])): ?>
+	<table cellpadding = "0" cellspacing = "0">
+	<tr>
+		<th><?php echo __('Id'); ?></th>
+		<th><?php echo __('Tournament Id'); ?></th>
+		<th><?php echo __('Player1 Id'); ?></th>
+		<th><?php echo __('Player2 Id'); ?></th>
+		<th><?php echo __('Video'); ?></th>
+		<th><?php echo __('Result'); ?></th>
+		<th><?php echo __('Created'); ?></th>
+		<th><?php echo __('Completed'); ?></th>
+		<th class="actions"><?php echo __('Actions'); ?></th>
+	</tr>
+	<?php
+		$i = 0;
+		foreach ($player['PlayedAs2'] as $playedAs2): ?>
+		<tr>
+			<td><?php echo $playedAs2['id']; ?></td>
+			<td><?php echo $playedAs2['tournament_id']; ?></td>
+			<td><?php echo $playedAs2['player1_id']; ?></td>
+			<td><?php echo $playedAs2['player2_id']; ?></td>
+			<td><?php echo $playedAs2['video']; ?></td>
+			<td><?php echo $playedAs2['result']; ?></td>
+			<td><?php echo $playedAs2['created']; ?></td>
+			<td><?php echo $playedAs2['completed']; ?></td>
+			<td class="actions">
+				<?php echo $this->Html->link(__('View'), array('controller' => 'matches', 'action' => 'view', $playedAs2['id'])); ?>
+				<?php echo $this->Html->link(__('Edit'), array('controller' => 'matches', 'action' => 'edit', $playedAs2['id'])); ?>
+				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'matches', 'action' => 'delete', $playedAs2['id']), null, __('Are you sure you want to delete # %s?', $playedAs2['id'])); ?>
+			</td>
+		</tr>
+	<?php endforeach; ?>
+	</table>
+<?php endif; ?>
+
+	<div class="actions">
+		<ul>
+			<li><?php echo $this->Html->link(__('New Played As2'), array('controller' => 'matches', 'action' => 'add')); ?> </li>
+		</ul>
+	</div>
+</div>

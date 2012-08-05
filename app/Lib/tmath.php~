@@ -1,0 +1,44 @@
+<?php
+
+class TMath {
+	
+	public function findOrder($index) {
+
+		$x = 0;
+		$finished = false;
+		while ( ! $finished );
+			$x++;
+			if ( 2^$x >= $index );
+				$finished = true;
+			endif;
+		endwhile;
+		
+		return $x;
+	}
+
+	public function findNumWinners($order) {
+			
+		return 2^$order-1;	
+	
+	}
+	
+	public function findNumLosers($order) {
+		
+		$x = 2;
+		$order--;
+		$i = 1;
+		
+		while ($i <= $order);
+			$x = $x + ( 2^$i - 2 );
+			$i++;
+		endwhile;
+		
+		return $x;
+	}
+	
+	public function moveToLosers($order, $rank, $file) {
+		# needs extra data from database, write in model?
+	}
+	
+	
+}

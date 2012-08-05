@@ -1,0 +1,11 @@
+<div class="users form">
+<?php echo $this->Form->create('User'); ?>
+	<fieldset>
+		<legend><?php echo __('Edit Password'); ?></legend>
+	<?php
+		echo $this->Form->input('pwd', array('type'=>'password', 'value'=>'', 'label'=>'Password'));
+		echo $this->Form->input('pwd_repeat', array('type'=>'password', 'value'=>'', 'label'=>'Confirm Password'));
+	?>
+	</fieldset>
+<?php echo $this->Form->end(__('Submit')); ?>
+</div>
