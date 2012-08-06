@@ -104,21 +104,22 @@ class Tournament extends AppModel {
 		
 	}
 
-	public function initMatches($order, $seed, $tournamentId) {
+	public function initMatches($order, $seed) {
 		$h = pow(2, $order) - 1;
 		$i = pow(2, $order) / 2;
 		
 		for ($j = 0; $j < $i; $j++) {
-			$start[$j]['tournament_id'] = (int)$tournamentId;
+			$start[$j]['tournament_id'] = (int)$seed[$j]['Registration']['tournament_id'];
 			$start[$j]['type'] = 'WI';
 			$start[$j]['round'] = $order;
 			$start[$j]['column'] = $j + 1;
-			$start[$j]['player1_id'] = (int)$seed[$j]['User']['id'];
+			$start[$j]['player1_id'] = (int)$seed[$j]['Registration']['user_id'];
 			if	(!$seed[$h-$j]) {
 				$start[$j]['player2_id'] = null;
 				$start[$j]['result'] = 'P1';
+				$start[$j]['completed'] = date('Y-m-d h:i:s');
 			} else {
-				$start[$j]['player2_id'] = (int)$seed[$h-$j]['User']['id'];
+				$start[$j]['player2_id'] = (int)$seed[$h-$j]['Registration']['id'];
 			}
 		}
 		

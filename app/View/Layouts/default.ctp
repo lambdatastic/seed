@@ -35,8 +35,7 @@ $cakeDescription = __d('cake_dev', 'KDP S.E.E.D. System');
 
 		$this->Js->JqueryEngine->jQueryObject = '$j';
 		echo $this->Html->scriptBlock(
-			'var $j = jQuery.noConflict();',
-			array('inline' => false)
+			'var $j = jQuery.noConflict();'
 		);
 
 
