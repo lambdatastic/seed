@@ -8,7 +8,11 @@ App::uses('AppModel', 'Model');
  * @property Player2 $Player2
  */
 class Match extends AppModel {
-
+	public function beforeSave($options) {
+		if(empty($this->data['Match']['completed']) && !empty($this->data['Match']['result'])) {
+			$this->data['Match']['completed'] = date('Y-m-d H:i:s');
+		}
+	}
 
 /**
  * Validation rules
@@ -273,7 +277,6 @@ help with larger tournaments.
 		} else {
 			$this->create();
 			$this->save($nextMatch);
-			debug($nextMatch);
 			return $nextMatch;
 		}
 	}

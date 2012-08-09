@@ -119,7 +119,7 @@ class Tournament extends AppModel {
 				$start[$j]['result'] = 'P1';
 				$start[$j]['completed'] = date('Y-m-d h:i:s');
 			} else {
-				$start[$j]['player2_id'] = (int)$seed[$h-$j]['Registration']['id'];
+				$start[$j]['player2_id'] = (int)$seed[$h-$j]['Registration']['user_id'];
 			}
 		}
 		
@@ -127,4 +127,38 @@ class Tournament extends AppModel {
 		
 	}
 
+
+	public function initMatchesTrue($order, $seed) {
+		$seedSort = array(1,2);
+		
+		for ($j = 2; $j <= $order; $j++) {
+			$k = pow(2, $j) / 2;
+			for ($l = 0; $l < $k; $l++) {
+				$m = array_shift($seedSort);
+				array_push($seedSort, $m, pow(2, $j) - $m + 1);
+			}
+		}
+		
+		debug($seedSort);
+		
+		$i = pow(2, $order) / 2;
+		
+		for ($j = 0; $j < $i; $j++) {
+			$start[$j]['tournament_id'] = (int)$seed[$j]['Registration']['tournament_id'];
+			$start[$j]['type'] = 'WI';
+			$start[$j]['round'] = $order;
+			$start[$j]['column'] = $j + 1;
+			$start[$j]['player1_id'] = (int)$seed[$seedSort[$j * 2] - 1]['Registration']['user_id'];
+			if	(!$seed[$j * 2 + 1]) {
+				$start[$j]['player2_id'] = null;
+				$start[$j]['result'] = 'P1';
+				$start[$j]['completed'] = date('Y-m-d H:i:s');
+			} else {
+				$start[$j]['player2_id'] = (int)$seed[$seedSort[$j * 2 + 1] - 1]['Registration']['user_id'];
+			}
+		}
+		
+		return $start;
+	}
+		
 }

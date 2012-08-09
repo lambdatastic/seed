@@ -128,7 +128,7 @@ class RankingsController extends AppController {
 			'alias' => 'Match',
 			'type' => 'INNER',
 			'conditions' => array(
-				//'Match.completed >' => date('Y-m-d h:i:s', strtotime('-1 week')),
+				'Match.completed >' => date('Y-m-d h:i:s', strtotime('-1 week')),
 				'Match.tournament_id' => 'Tournament.id',
 				'Match.player1_id IS NOT NULL',
 				'Match.player2_id IS NOT NULL',

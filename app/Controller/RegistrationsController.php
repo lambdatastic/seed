@@ -6,7 +6,7 @@ App::uses('AppController', 'Controller');
  * @property Registration $Registration
  */
 class RegistrationsController extends AppController {
-
+	 
 /*
 	public function isAuthorized($user) {
 
@@ -53,6 +53,8 @@ class RegistrationsController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
+			#debug($this->request);
+			
 			$this->Registration->create();
 
 			$game = $this->Registration->Tournament->field('game', array('id' => $this->request->data['Registration']['tournament_id'] ));
@@ -69,7 +71,9 @@ class RegistrationsController extends AppController {
 				$newRank['Ranking']['game'] = $game;
 				$this->request->data['Registration']['rating'] = $newRank['Ranking']['rating'];
 				$this->request->data['Registration']['rd'] = $newRank['Ranking']['rd'];
+				$this->Ranking->create();
 				$this->Ranking->save($newRank);
+				#debug($this->Ranking->validationErrors);
 			} else {			
 				$this->request->data['Registration']['rating'] = $this->Ranking->field('rating', array(
 					'game' => $game,
@@ -82,7 +86,7 @@ class RegistrationsController extends AppController {
 			}
 			
 			if ($this->Registration->save($this->request->data)) {
-				$this->Session->setFlash(__('The registration has been saved'));
+				$this->Session->setFlash(__($this->request->data['Registration']['user_id'] . ' is registered for ' . $this->request->data['Registration']['tournament_id']));
 #				$this->redirect(array('controller' => 'events', 'action' => 'view', $this->request->query['event']));
 			} else {
 				$this->Session->setFlash(__('The registration could not be saved. Please, try again.'));

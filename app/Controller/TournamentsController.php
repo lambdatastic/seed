@@ -41,10 +41,10 @@ class TournamentsController extends AppController {
 		if ($this->request->is('post')) {
 			$this->Tournament->create();
 			if ($this->Tournament->save($this->request->data)) {
-				$this->Session->setFlash(__('The tournament has been saved'));
+				$this->Session->setFlash(__('This tournament has been saved'));
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The tournament could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The tournament could not be saved. Please try again'));
 			}
 		}
 		if($this->request->query['event']) {	
@@ -123,7 +123,7 @@ class TournamentsController extends AppController {
 		debug($seeds);
 		$torder = $this->Tournament->findOrder(count($seeds));
 		
-		$initialMatches = $this->Tournament->initMatches($torder, $seeds);		
+		$initialMatches = $this->Tournament->initMatchesTrue($torder, $seeds);		
 		
 				
 		foreach ($initialMatches as $iMatch) {
@@ -147,7 +147,7 @@ class TournamentsController extends AppController {
 		
 		foreach($nullLosers as $nMatch) {
 			$nMatch['Match']['result'] = 'P1';
-			$nMatch['Match']['completed'] = date('Y-m-d h:i:s');
+			$nMatch['Match']['completed'] = date('Y-m-d H:i:s');
 			$this->Tournament->Match->save($nMatch);
 			$this->Tournament->Match->promoteLoser($this->Tournament->Match->convertToFlat($nMatch));
 		}
@@ -191,6 +191,7 @@ class TournamentsController extends AppController {
 			} else {
 				$fMatch['Match']['result'] = 'P2';
 			}
+			$fMatch['Match']['completed'] = date('Y-m-d H:i:s');
 			
 			if($this->Tournament->Match->save($fMatch)) {
 				$this->Session->setFlash(__('Saved match'));
@@ -239,6 +240,7 @@ class TournamentsController extends AppController {
 				} else {
 					$dMatch['Match']['result'] = 'P1';
 				}
+				$dMatch['Match']['completed'] = date('Y-m-d H:i:s');
 				$this->Tournament->Match->save($dMatch);
 				$this->Tournament->Match->promoteLoser($dMatch['Match']);
 			}
@@ -249,5 +251,48 @@ class TournamentsController extends AppController {
 		
 		
 		$this->set(compact('currentMatches'));
+	}
+	
+	public function test ($id = null) {
+		$this->Tournament->id = $id;
+		
+		$seeds = $this->Tournament->Registration->find('all', array(
+			'recursive' => 0,
+			'conditions' => array('Registration.tournament_id' => $this->Tournament->id),
+			'order' => array('Registration.rating DESC', 'Registration.rd ASC')
+		));
+		debug($seeds);
+		$torder = $this->Tournament->findOrder(count($seeds));
+		
+		$initialMatches = $this->Tournament->initMatchesTrue($torder, $seeds);
+		
+		debug($initialMatches);
+		
+	
+		$options['joins'] = array(
+		array( 'table' => 'matches',
+			'alias' => 'Match',
+			'type' => 'INNER',
+			'conditions' => array(
+				'Match.completed >' => date('Y-m-d h:i:s', strtotime('-1 week')),
+				'Match.tournament_id' => 'Tournament.id',
+				'Match.player1_id IS NOT NULL',
+				'Match.player2_id IS NOT NULL',
+				'OR' => array(
+					'Match.player1_id' => 'Ranking.user_id',
+					'Match.player2_id' => 'Ranking.user_id'
+				))
+		),
+		array( 'table' => 'tournaments',
+			'alias' => 'Tournament',
+			'type' => 'INNER',
+			'conditions' => array(
+				'Tournament.game' => 'Ranking.game'
+			)
+		));
+		
+		$this->Ranking->recursive = -1;
+		$test = $this->Ranking->find('all', $options);
+		debug($test);
 	}
 }
