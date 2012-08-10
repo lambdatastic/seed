@@ -8,7 +8,7 @@
 		</dd>
 		<dt><?php echo __('Tournament'); ?></dt>
 		<dd>
-			<?php echo $this->Html->link($match['Tournament']['id'], array('controller' => 'tournaments', 'action' => 'view', $match['Tournament']['id'])); ?>
+			<?php echo $this->Html->link($match['Tournament']['game'], array('controller' => 'tournaments', 'action' => 'view', $match['Tournament']['id'])); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Player1'); ?></dt>

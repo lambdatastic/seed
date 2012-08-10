@@ -109,7 +109,5 @@ class MatchesController extends AppController {
 		$this->redirect(array('action' => 'index'));
 	}
 	
-	public function run() {
-		$seeds = $this->Registration->Match->find('all');
-		debug($seeds);  
+
 }

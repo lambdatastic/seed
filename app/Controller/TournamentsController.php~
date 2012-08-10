@@ -400,17 +400,18 @@ class TournamentsController extends AppController {
 			if ($gfMatch[0]['Match']['result'] == 'P1') {
 				$bData['results'][2][0] = $p1w;
 			} elseif($gfMatch[0]['Match']['result'] == 'P2') {
-				$bData['results'][2][0] = array($p2w, $p2w);
+				$bData['results'][2][0][0] = $p2w;
+				$bData['results'][2][1][0] = $p2w;
 			} else {
 				$bData['results'][2][0] = $inc;
 			}
 		}
 		
 		if($gfMatch[0]['Match']['player1_id'] > 0 && $gfMatch[0]['Match']['player2_id'] > 0) {
-			$bData['results'][2][1];
+			$bData['results'][2][0][1] = $p2w;
 		}
 		
-		debug($lMatches);
+		#debug($lMatches);
 		
 		debug($bData);
 		

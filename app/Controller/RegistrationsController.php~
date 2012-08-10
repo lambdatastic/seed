@@ -53,7 +53,7 @@ class RegistrationsController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
-			debug($this->request);
+			#debug($this->request);
 			
 			$this->Registration->create();
 
@@ -73,7 +73,7 @@ class RegistrationsController extends AppController {
 				$this->request->data['Registration']['rd'] = $newRank['Ranking']['rd'];
 				$this->Ranking->create();
 				$this->Ranking->save($newRank);
-				debug($this->Ranking->validationErrors);
+				#debug($this->Ranking->validationErrors);
 			} else {			
 				$this->request->data['Registration']['rating'] = $this->Ranking->field('rating', array(
 					'game' => $game,
@@ -176,5 +176,6 @@ class RegistrationsController extends AppController {
 		);
 		$registrations = $this->paginate('Registration');
 		$this->set('registrations', $registrations);
+		debug($registrations);
 	}
 }
