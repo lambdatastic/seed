@@ -139,7 +139,7 @@ class Tournament extends AppModel {
 			}
 		}
 		
-		debug($seedSort);
+		#debug($seedSort);
 		
 		$i = pow(2, $order) / 2;
 		

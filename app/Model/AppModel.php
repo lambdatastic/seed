@@ -31,6 +31,8 @@ App::uses('Model', 'Model');
  * @package       app.Model
  */
 class AppModel extends Model {
+public $actsAs = array('Containable');
+	
 
 public function checkUnique($data, $fields) {
     if (!is_array($fields)) {

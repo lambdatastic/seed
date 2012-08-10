@@ -149,7 +149,7 @@ class Tournament extends AppModel {
 			$start[$j]['round'] = $order;
 			$start[$j]['column'] = $j + 1;
 			$start[$j]['player1_id'] = (int)$seed[$seedSort[$j * 2] - 1]['Registration']['user_id'];
-			if	(!$seed[$j * 2 + 1]) {
+			if	(!$seed[$seedSort[$j * 2 + 1] - 1]) {
 				$start[$j]['player2_id'] = null;
 				$start[$j]['result'] = 'P1';
 				$start[$j]['completed'] = date('Y-m-d H:i:s');

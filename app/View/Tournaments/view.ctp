@@ -21,6 +21,10 @@
 			'action' => 'seeds', 
 			'?' => array('event' => $tournament['Tournament']['id']
 		))); ?></li>
+		<li><?php echo $this->Html->link(__('Start/Run This Tournament'), array(
+			'action' => 'start', 
+			$tournament['Tournament']['id']
+		)); ?></li>
 	</ul>
 </div>
 <div class="related">

@@ -7,6 +7,13 @@ App::uses('AppController', 'Controller');
  */
 class TournamentsController extends AppController {
 
+	public $tcontain = array(
+		'Event',
+		'Match' => array(
+			'Player1.name',
+			'Player2.name'
+		)
+	);
 /**
  * index method
  *
@@ -29,6 +36,18 @@ class TournamentsController extends AppController {
 		if (!$this->Tournament->exists()) {
 			throw new NotFoundException(__('Invalid tournament'));
 		}
+		$this->Tournament->contain(array(
+			'Event',
+			'Match' => array(
+				'Player1.name',
+				'Player2.name',
+				'conditions' => array(
+					'Match.player1_id IS NOT NULL',
+					'Match.player2_id IS NOT NULL'
+				)
+			)
+		));
+		#debug($this->Tournament->read(null, $id));
 		$this->set('tournament', $this->Tournament->read(null, $id));
 	}
 
@@ -120,7 +139,7 @@ class TournamentsController extends AppController {
 			'conditions' => array('Registration.tournament_id' => $this->Tournament->id),
 			'order' => array('Registration.rating DESC', 'Registration.rd ASC')
 		));
-		debug($seeds);
+		#debug($seeds);
 		$torder = $this->Tournament->findOrder(count($seeds));
 		
 		$initialMatches = $this->Tournament->initMatchesTrue($torder, $seeds);		
@@ -171,12 +190,12 @@ class TournamentsController extends AppController {
 		}
 		*/
 		if ($this->Tournament->Match->saveMany($initialMatches)) {
-			$this->Session->setFlash(__('Starting matches saved'));
+			$this->Session->setFlash(__('Starting matches saved, please refresh this page'));
 			$this->setAction('run');
 			#$this->redirect(array('action' => 'run'));         #Does not work, though I think it should
 		} else {
 			$this->Session->setFlash(__('Failed to start'));
-			debug($this->Tournament->Match->validationErrors);
+			#debug($this->Tournament->Match->validationErrors);
 		}
 	}
 
@@ -184,6 +203,14 @@ class TournamentsController extends AppController {
 		$this->Tournament->id = $id;
 		#debug($this->request);
 		
+		$seeds = $this->Tournament->Registration->find('all', array(
+			'recursive' => -1,
+			'conditions' => array('Registration.tournament_id' => $this->Tournament->id),
+			'order' => array('Registration.rating DESC', 'Registration.rd ASC')
+		));
+		
+		$torder = $this->Tournament->findOrder(count($seeds));
+			
 		if ($this->request->is('post')) {
 			$fMatch['Match'] = $this->request->data['Match'];
 			if(isset($this->request->data['P1'])) {
@@ -217,7 +244,7 @@ class TournamentsController extends AppController {
 			} elseif($fMatch['Match']['type'] == 'LD' || $fMatch['Match']['type'] == 'LV') {
 				$this->Tournament->Match->promoteLoser($fMatch['Match']);
 			} else {
-				$this->redirect(array('action' => 'end', $this->Tournament->id));
+				$this->setFlash(__('Tournament completed'));
 			}
 			
 			$dMatches = $this->Tournament->Match->find('all', array(
@@ -248,9 +275,148 @@ class TournamentsController extends AppController {
 		
 		$currentMatches = $this->Tournament->Match->getActiveMatches($this->Tournament->id);
 		#debug($currentMatches);
+
+		//code to generate brackets
+		
+		// get order
+
+		//should be a contain
+		$winners = $this->Tournament->Match->find('all', array(
+			'conditions' => array(
+				'Match.tournament_id' => $this->Tournament->id,
+				'Match.type' => 'WI',
+				'Match.round' => $torder
+			),
+			'order' => array(
+				'Match.round DESC',
+				'Match.column ASC'
+			),
+			'contain' => array(
+				'Player1.name',
+				'Player2.name'
+			)
+		));
+		#debug($winners);
+				
+		
+		$bData = array(
+		'teams' => array(),
+		'results' => array()
+		);
+		
+		foreach ($winners as $winner) {
+			$nd = array();
+			if ($winner['Player1']['name'] == null) {
+				array_push($nd, 'Bye');
+			} else {
+				array_push($nd, $winner['Player1']['name']);
+			}
+			if ($winner['Player2']['name'] == null) {
+				array_push($nd, 'Bye');
+			} else {
+				array_push($nd, $winner['Player2']['name']);
+			}			
+			array_push($bData['teams'], $nd);
+		}
+		
+		$wMatches = $this->Tournament->Match->find('all', array(
+			'conditions' => array(
+				'Match.tournament_id' => $this->Tournament->id,
+				'Match.type' => 'WI'
+			),
+			'order' => array(
+				'Match.round DESC',
+				'Match.column ASC'
+			),
+			'contain' => false
+		));
+		
+		$lMatches = $this->Tournament->Match->find('all', array(
+			'conditions' => array(
+				'Match.tournament_id' => $this->Tournament->id,
+				'NOT' => array('Match.type' => array('WI', 'GF'))
+			),
+			'order' => array(
+				'Match.round DESC',
+				'Match.type ASC',
+				'Match.column ASC'
+			),
+			'contain' => false
+		));
+		
+		$p1w = array(1, 0);
+		$p2w = array(0, 1);
+		$inc = array("", "");
 		
 		
-		$this->set(compact('currentMatches'));
+		for ($x = 0; $x < $torder; $x++) {
+			for ($y = 0; $y < pow(2, $torder - $x) / 2; $y++) {
+				if ($wMatches[0]['Match']['round'] == $torder - $x && $wMatches[0]['Match']['column'] == $y + 1) {
+					if ($wMatches[0]['Match']['result'] == 'P1') {
+						$bData['results'][0][$x][$y] = $p1w;
+					} elseif($wMatches[0]['Match']['result'] == 'P2') {
+						$bData['results'][0][$x][$y] = $p2w;
+					} else {
+						$bData['results'][0][$x][$y] = $inc;
+					}
+					array_shift($wMatches);
+				} else {
+					$bData['results'][0][$x][$y] = $inc;
+				}
+			}
+		}
+	
+		for ($x = 0; $x < $torder - 1; $x++) {
+			for ($y = 0; $y < 2; $y++) {
+				for ($z = 0; $z < pow(2, $torder - $x - 1) / 2; $z++) {
+					if ((($lMatches[0]['Match']['type'] == 'LV' && $y == 0) || ($lMatches[0]['Match']['type'] == 'LD' && $y == 1)) &&
+						$lMatches[0]['Match']['round'] == $torder - $x - 1 &&
+						$lMatches[0]['Match']['column'] == $z + 1
+					) {
+						if ($lMatches[0]['Match']['result'] == 'P1') {
+							$bData['results'][1][$x * 2 + $y][$z] = $p1w;
+						} elseif($lMatches[0]['Match']['result'] == 'P2') {
+							$bData['results'][1][$x * 2 + $y][$z] = $p2w;
+						} else {
+							$bData['results'][1][$x * 2 + $y][$z] = $inc;
+						}
+						array_shift($lMatches);
+					} else {
+						$bData['results'][1][$x * 2 + $y][$z] = $inc;
+					}
+				}
+			}
+		}
+		
+		$gfMatch = $this->Tournament->Match->find('all', array(
+			'conditions' => array(
+				'Match.tournament_id' => $this->Tournament->id,
+				'Match.type ' => 'GF'
+			),
+			'contain' => false
+		));
+		
+		if($gfMatch) {
+			if ($gfMatch[0]['Match']['result'] == 'P1') {
+				$bData['results'][2][0] = $p1w;
+			} elseif($gfMatch[0]['Match']['result'] == 'P2') {
+				$bData['results'][2][0] = array($p2w, $p2w);
+			} else {
+				$bData['results'][2][0] = $inc;
+			}
+		}
+		
+		if($gfMatch[0]['Match']['player1_id'] > 0 && $gfMatch[0]['Match']['player2_id'] > 0) {
+			$bData['results'][2][1];
+		}
+		
+		debug($lMatches);
+		
+		debug($bData);
+		
+		
+		
+		$this->set(compact('currentMatches', 'bData'));
 	}
 	
 	public function test ($id = null) {
@@ -261,38 +427,11 @@ class TournamentsController extends AppController {
 			'conditions' => array('Registration.tournament_id' => $this->Tournament->id),
 			'order' => array('Registration.rating DESC', 'Registration.rd ASC')
 		));
-		debug($seeds);
+		#debug($seeds);
 		$torder = $this->Tournament->findOrder(count($seeds));
 		
 		$initialMatches = $this->Tournament->initMatchesTrue($torder, $seeds);
 		
-		debug($initialMatches);
 		
-	
-		$options['joins'] = array(
-		array( 'table' => 'matches',
-			'alias' => 'Match',
-			'type' => 'INNER',
-			'conditions' => array(
-				'Match.completed >' => date('Y-m-d h:i:s', strtotime('-1 week')),
-				'Match.tournament_id' => 'Tournament.id',
-				'Match.player1_id IS NOT NULL',
-				'Match.player2_id IS NOT NULL',
-				'OR' => array(
-					'Match.player1_id' => 'Ranking.user_id',
-					'Match.player2_id' => 'Ranking.user_id'
-				))
-		),
-		array( 'table' => 'tournaments',
-			'alias' => 'Tournament',
-			'type' => 'INNER',
-			'conditions' => array(
-				'Tournament.game' => 'Ranking.game'
-			)
-		));
-		
-		$this->Ranking->recursive = -1;
-		$test = $this->Ranking->find('all', $options);
-		debug($test);
 	}
 }

@@ -18,9 +18,13 @@
 	<ul>
 		<li><?php echo $this->Html->link(__('View Registrations'), array(
 			'controller' => 'registrations',
-			'action' => 'add', 
+			'action' => 'seeds', 
 			'?' => array('event' => $tournament['Tournament']['id']
 		))); ?></li>
+		<li><?php echo $this->Html->link(__('Start This Tournament'), array(
+			'action' => 'start', 
+			$tournament['Tournament']['id']
+		)); ?></li>
 	</ul>
 </div>
 <div class="related">

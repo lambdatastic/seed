@@ -1,3 +1,22 @@
+<?php 
+echo $this->Html->script('bracket-5'); 
+echo $this->Html->css('bracket-5'); 
+?>
+
+<div id='brackets'>
+<script type="text/javascript" >
+var bracketData = <?php echo $this->Js->object($bData); ?>
+
+$j(function() {
+    $j('#brackets').bracket({
+      init: bracketData /* data to initialize the bracket with */ })
+  })
+
+</script>
+
+
+</div>
+
 <div class="related">
 	<h3><?php echo __('Active Matches'); ?></h3>
 	<table cellpadding='0' cellspacing="0">
