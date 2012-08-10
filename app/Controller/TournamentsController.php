@@ -42,8 +42,9 @@ class TournamentsController extends AppController {
 				'Player1.name',
 				'Player2.name',
 				'conditions' => array(
-					'Match.player1_id IS NOT NULL',
-					'Match.player2_id IS NOT NULL'
+					'Match.player1_id >' => 0,
+					'Match.player2_id >' => 0,
+					'Match.result IS NOT NULL'
 				)
 			)
 		));
@@ -244,7 +245,7 @@ class TournamentsController extends AppController {
 			} elseif($fMatch['Match']['type'] == 'LD' || $fMatch['Match']['type'] == 'LV') {
 				$this->Tournament->Match->promoteLoser($fMatch['Match']);
 			} else {
-				$this->setFlash(__('Tournament completed'));
+				$this->Session->setFlash(__('Tournament completed'));
 			}
 			
 			$dMatches = $this->Tournament->Match->find('all', array(

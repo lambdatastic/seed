@@ -34,7 +34,7 @@ class MatchesController extends AppController {
 			throw new NotFoundException(__('Invalid match'));
 		}
 		$this->set('match', $this->Match->read(null, $id));
-		debug($this->Match->read(null, $id));
+		#debug($this->Match->read(null, $id));
 	}
 
 /**
