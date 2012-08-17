@@ -4,7 +4,9 @@
 		<legend><?php echo __('Add Registration'); ?></legend>
 	<?php
 		echo $this->Form->input('user_id');
-		echo $this->Form->input('tournament_id');
+		echo $this->Form->select('tournament_id', $tournaments, array(
+			'multiple' => 'checkbox'
+		));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

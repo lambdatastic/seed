@@ -53,12 +53,14 @@ class RegistrationsController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
-			#debug($this->request);
+			debug($this->request);
 			
+			$user = $this->Registration->User->field('name', array('id' => $this->request->data['Registration']['user_id']));
+
+			foreach ($this->request->data['Registration']['tournament_id'] as $tournament_id) {
+
+			$game = $this->Registration->Tournament->field('game', array('id' => $tournament_id ));
 			$this->Registration->create();
-
-			$game = $this->Registration->Tournament->field('game', array('id' => $this->request->data['Registration']['tournament_id'] ));
-
 			$this->loadModel('Ranking');
 			if(!$this->Ranking->field('rating', array(
 				'game' => $game,
@@ -85,11 +87,15 @@ class RegistrationsController extends AppController {
 				));
 			}
 			
-			if ($this->Registration->save($this->request->data)) {
-				$this->Session->setFlash(__($this->request->data['Registration']['user_id'] . ' is registered for ' . $this->request->data['Registration']['tournament_id']));
+			$newReg['Registration'] = $this->request->data['Registration'];
+			$newReg['Registration']['tournament_id'] = $tournament_id;
+
+			if ($this->Registration->save($newReg)) {
+				$this->Session->setFlash(__($user . ' has been registered.'));
 #				$this->redirect(array('controller' => 'events', 'action' => 'view', $this->request->query['event']));
 			} else {
 				$this->Session->setFlash(__('The registration could not be saved. Please, try again.'));
+			}
 			}
 		}
 		$users = $this->Registration->User->find('list', array(
