@@ -90,7 +90,7 @@ class User extends AppModel {
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
-				'on' => 'create' // Limit validation to 'create' or 'update' operations
+				//'on' => 'create' // Limit validation to 'create' or 'update' operations
 			),
 			'unique' => array(
 				'rule' => array('isUnique'),
@@ -98,7 +98,7 @@ class User extends AppModel {
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
 		'bio' => array(
