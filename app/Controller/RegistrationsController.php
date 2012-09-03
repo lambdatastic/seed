@@ -53,7 +53,7 @@ class RegistrationsController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
-			debug($this->request);
+			#debug($this->request);
 			
 			$user = $this->Registration->User->field('name', array('id' => $this->request->data['Registration']['user_id']));
 
