@@ -557,6 +557,7 @@ input[type=submit]:active,
 .related {
 	clear: both;
 	display: block;
+	padding-top: 10px;
 }
 
 /** Debugging **/
