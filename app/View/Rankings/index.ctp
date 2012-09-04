@@ -1,4 +1,4 @@
-<div class="rankings index">
+<div class="rankings index" style="width:72%">
 <!--	<h2>Filter by Game</h2>
 	<?php
 /*
@@ -60,7 +60,7 @@
 	?>
 	</div>
 </div>
-<div class="actions">
+<div class="actions" style="width:20%">
 	<h3><?php echo __('Games'); ?></h3>
 	<ul>
 		<?php foreach ($games as $game): ?>
