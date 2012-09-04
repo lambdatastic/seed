@@ -1,6 +1,7 @@
 <div class="rankings index">
-	<h2>Filter by Game</h2>
+<!--	<h2>Filter by Game</h2>
 	<?php
+/*
 		echo $this->Form->create(false, array('action' => 'leaderboard'));
 		echo $this->Form->select('game',  array(
 				'Guilty Gear Accent Core Plus' => 'Guilty Gear Accent Core Plus',
@@ -21,8 +22,9 @@
 			)
 		);
 		echo $this->Form->end('Filter');
+*/
 	?>
-
+-->
 	<h2><?php echo __('Rankings'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
@@ -58,4 +60,11 @@
 	?>
 	</div>
 </div>
-
+<div class="actions">
+	<h3><?php echo __('Games'); ?></h3>
+	<ul>
+		<?php foreach ($games as $game): ?>
+		<li><?php echo $this->Html->link(__($game), array('action' => 'leaderboard', '?' => array('game' => $game))); ?> </li>
+		<?php endforeach; ?>
+	</ul>
+</div>

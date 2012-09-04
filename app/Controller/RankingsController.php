@@ -26,6 +26,11 @@ class RankingsController extends AppController {
 	public function index() {
 		$this->Ranking->recursive = 0;
 		$this->set('rankings', $this->paginate());
+
+		$glist = $this->Ranking->find('list', array('fields' => array('Ranking.game')));
+		$games = array_unique($glist);
+		$this->set(compact('games'));
+		debug($games);
 	}
 
 /**
@@ -114,11 +119,12 @@ class RankingsController extends AppController {
 
 
 	public function leaderboard($game = null) {
-		if ($this->request->is('post')) {
-			$game = $this->request->data['game'];
+		if ($this->request->query['game']) {
+			$leaders = $this->paginate('Ranking', array('Ranking.game =' => $this->request->query['game']));
+			$this->set('leaders', $leaders);
+		} else {
+			$this->redirect(array('action' => 'index'));
 		};
-		$leaders = $this->paginate('Ranking', array('Ranking.game =' => $game));
-		$this->set('leaders', $leaders);
 	}
 	
 	public function test ($id = null) {
