@@ -9,7 +9,12 @@
 		echo $this->Form->input('state');
 		echo $this->Form->input('email');
 		echo $this->Form->input('bio');
-		echo $this->Form->input('pin');
+		echo $this->Html->link('Change Pin', array(
+			'controller' => 'users',
+			'action' => 'changePin',
+			$this->Session->read('Auth.User.id')
+		));
+		echo __('<br>');
 		echo $this->Html->link('Change Password', array(
 			'controller' => 'users',
 			'action' => 'changePassword',

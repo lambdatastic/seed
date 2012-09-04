@@ -59,8 +59,8 @@ class RegistrationsController extends AppController {
 				$pattern = '/[0-9]+$/';
 				preg_match($pattern, $this->request->data['Registration']['user_link'], $uid);
 				$upin = $this->Registration->User->field('pin', array('id' => $uid[0]));
-
-				if ($upin == $this->request->data['Registration']['user_pin']) {
+				$pc = AuthComponent::password($this->request->data['Registration']['user_pin']);
+				if ($pc == $upin) {
 					$this->request->data['Registration']['user_id'] = $uid[0];
 					debug($uid[0]);
 					debug($this->request->data['Registration']['user_id']);
