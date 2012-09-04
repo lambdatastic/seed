@@ -119,11 +119,23 @@ class RegistrationsController extends AppController {
 			$tournaments	= $this->Registration->Tournament->find('list', array(
 				'conditions' => array('Tournament.event_id' => $this->request->query['event'])
 			));
+			$tlist = $this->Registration->Tournament->find('all', array(
+				'conditions' => array('Tournament.event_id' => $this->request->query['event']),
+				'recursive' => -1
+			));
+			$registrations = array();
+			foreach ($tlist as $t):
+				$regs = $this->Registration->find('all', array(
+					'conditions' => array('Registration.tournament_id' => $t['Tournament']['id']),
+					'contain' => 'User.name'
+				));
+				array_push($registrations, $regs);
+			endforeach;
 		} else {
 			$this->Session->setFlash(__('No event set, please navigate to from an event sidebar.'));
 			$this->redirect(array('controller' => 'events', 'action' => 'index'));
 		}
-		$this->set(compact('users', 'tournaments'));
+		$this->set(compact('users', 'tournaments', 'registrations'));
 	}
 
 /**
@@ -169,9 +181,11 @@ class RegistrationsController extends AppController {
 		if (!$this->Registration->exists()) {
 			throw new NotFoundException(__('Invalid registration'));
 		}
+		/* $t = $this->Registration->field('tournament_id'); */
+		$e = $this->Registration->Tournament->field('event_id', array('id' => $this->Registration->field('tournament_id')));
 		if ($this->Registration->delete()) {
 			$this->Session->setFlash(__('Registration deleted'));
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(array('action' => 'add', '?' => array('event' => $e)));
 		}
 		$this->Session->setFlash(__('Registration was not deleted'));
 		$this->redirect(array('action' => 'index'));
