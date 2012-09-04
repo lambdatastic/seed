@@ -55,6 +55,18 @@ class RegistrationsController extends AppController {
 		if ($this->request->is('post')) {
 			debug($this->request);
 			
+			if ($this->request->data['Registration']['user_link']) {
+				$pattern = '/[0-9]+$/';
+				preg_match($pattern, $this->request->data['Registration']['user_link'], $uid);
+				$upin = $this->Registration->User->field('pin', array('id' => $uid[0]));
+				$pc = AuthComponent::password($this->request->data['Registration']['user_pin']);
+				if ($pc == $upin) {
+					$this->request->data['Registration']['user_id'] = $uid[0];
+					debug($uid[0]);
+					debug($this->request->data['Registration']['user_id']);
+				}
+			}
+
 			$user = $this->Registration->User->field('name', array('id' => $this->request->data['Registration']['user_id']));
 
 			foreach ($this->request->data['Registration']['tournament_id'] as $tournament_id) {
@@ -92,7 +104,9 @@ class RegistrationsController extends AppController {
 
 			if ($this->Registration->save($newReg)) {
 				$this->Session->setFlash(__($user . ' has been registered.'));
-#				$this->redirect(array('controller' => 'events', 'action' => 'view', $this->request->query['event']));
+				$this->redirect(array('action' => 'add', '?' => array(
+					'event' => $this->request->query['event']
+				 )));
 			} else {
 				$this->Session->setFlash(__('The registration could not be saved. Please, try again.'));
 			}

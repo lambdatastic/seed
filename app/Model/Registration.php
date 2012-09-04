@@ -17,7 +17,7 @@ class Registration extends AppModel {
 		'user_id' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
+				'message' => 'No user was identified. Is the user\'s pin correct?',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule

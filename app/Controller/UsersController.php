@@ -128,6 +128,26 @@ class UsersController extends AppController {
     	unset($this->request->data['User']['pwd_repeat']);
 	}
 
+	public function changePin($id = null) {
+		$this->User->id = $id;
+		if (!$this->User->exists()) {
+			throw new NotFoundException(__('Invalid user'));
+		}
+		if ($this->request->is('post') || $this->request->is('put')) {
+			if($this->request->data['User']['pin'] != $this->request->data['User']['pin_check']) {
+				$this->Session->setFlash(__('The provided pins do not match'));
+			} elseif ($this->User->save($this->request->data)) {
+				$this->Session->setFlash(__('The pin has been saved'));
+				$this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The pin could not be saved. Please, try again.'));
+			}
+		} else {
+			$this->request->data = $this->User->read(null, $id);
+		}
+		unset($this->request->data['User']['pin']);
+    		unset($this->request->data['User']['pin_check']);
+	}
 /**
  * delete method
  *

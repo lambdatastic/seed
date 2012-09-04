@@ -3,7 +3,11 @@
 	<fieldset>
 		<legend><?php echo __('Add Registration'); ?></legend>
 	<?php
-		echo $this->Form->input('user_id');
+		echo $this->Form->input('user_link');
+		echo $this->Form->input('user_pin', array('type' => 'password'));
+		echo $this->Form->input('user_id', array(
+			'empty' => '(Use if card is forgotten)'
+		));
 		echo $this->Form->select('tournament_id', $tournaments, array(
 			'multiple' => 'checkbox'
 		));
