@@ -981,9 +981,9 @@
       rounds = (Math.log(data.teams.length*2) / Math.log(2)-1) * 2 + 1
 
     if (opts.save)
-      topCon.css('width', rounds*140+40)
+      topCon.css('width', rounds*240+40) /** this and 986 was rounds*140 **/
     else
-      topCon.css('width', rounds*140+10)
+      topCon.css('width', rounds*240+10)
 
     w = new Bracket(wEl, !r||!r[0]?null:r[0], data.teams)
 

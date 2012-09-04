@@ -23,7 +23,8 @@
 
 /** General Style Info **/
 body {
-	background: #003d4c;
+	/** background: #003d4c; **/
+	background: #0b1728;
 	color: #fff;
 	font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
 	font-size:90%;
@@ -47,7 +48,7 @@ h1, h2, h3, h4 {
 }
 h1 {
 	background:#fff;
-	color: #003d4c;
+	color: #0b1728; /** original value #003d4c **/
 	font-size: 100%;
 }
 h2 {
@@ -83,7 +84,7 @@ p {
 
 #header h1 {
 	line-height:20px;
-	background: #003d4c no-repeat left;
+	background: #0b1728 no-repeat left; /** original value #003d4c **/
 	color: #fff;
 	padding: 0px 30px;
 }
@@ -556,6 +557,7 @@ input[type=submit]:active,
 .related {
 	clear: both;
 	display: block;
+	padding-top: 10px;
 }
 
 /** Debugging **/

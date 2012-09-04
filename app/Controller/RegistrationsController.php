@@ -53,7 +53,7 @@ class RegistrationsController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
-			debug($this->request);
+			#debug($this->request);
 			
 			if ($this->request->data['Registration']['user_link']) {
 				$pattern = '/[0-9]+$/';
