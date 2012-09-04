@@ -30,7 +30,6 @@ class RankingsController extends AppController {
 		$glist = $this->Ranking->find('list', array('fields' => array('Ranking.game')));
 		$games = array_unique($glist);
 		$this->set(compact('games'));
-		debug($games);
 	}
 
 /**
