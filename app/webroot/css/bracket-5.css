@@ -12,9 +12,12 @@ div.jQBracket {
   float: left;
   clear: both;
   position: relative;
-  background-color: #333333;
+  background-color: #ffffff; /** originally #333333 **/
+  /**
   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#222222), to(#333333));
   background: -moz-linear-gradient(-90deg, #222222, #333333); }
+  **/
+  }
   div.jQBracket .tools {
     position: absolute;
     top: 0px;
@@ -45,7 +48,7 @@ div.jQBracket {
     position: relative; }
   div.jQBracket .round {
     position: relative;
-    width: 100px;
+    width: 200px;
     margin-right: 40px;
     float: left; }
   div.jQBracket .match {
@@ -59,7 +62,7 @@ div.jQBracket {
     float: left;
     background-color: #666666;
     color: white;
-    width: 100px;
+    width: 200px;
     height: 16px;
     border-radius: 5px;
     margin: 1px 0px;
@@ -71,7 +74,7 @@ div.jQBracket {
       cursor: pointer;
       height: inherit;
       position: absolute;
-      width: 70px; }
+      width: 170px; }
       div.jQBracket .team b[disabled] {
         cursor: default; }
       div.jQBracket .team b input {

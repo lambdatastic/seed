@@ -11,12 +11,16 @@ class User extends AppModel {
 
 	public function beforeSave($options = array()) {
 		if (!empty($this->data[$this->alias]['pwd'])) {
-      	$this->data[$this->alias]['password'] = AuthComponent::password($this->data[$this->alias]['pwd']);
-#    	} else {
-#    		unset($this->data[$this->alias]['password']);
-    	};		
+      			$this->data[$this->alias]['password'] = AuthComponent::password($this->data[$this->alias]['pwd']);
+#    		} else {
+#    			unset($this->data[$this->alias]['password']);
+	    	};
+		
+		if (!empty($this->data[$this->alias]['pin_check'])) {
+      			$this->data[$this->alias]['pin'] = AuthComponent::password($this->data[$this->alias]['pin_check']);
+	    	};
 		return true;
-}
+	}
 
 
 /**
