@@ -22,9 +22,16 @@
 	</ul>
 </div>
 <div class="related">
-	<h3><?php echo __('Registrations for this event'); ?></h3>
-	<?php foreach ($tournaments as $t): ?>
-		<h4><?php echo $t ?></h4>
+	<h2><?php echo __('Registrations for this event'); ?></h2>
+	<?php foreach ($tlist as $t): ?>
+		<h3><?php echo $t['Tournament']['game'] ?></h3><?php echo $this->Html->link(__('Start/Run This Tournament'), array(
+			'controller' => 'tournaments',
+			'action' => 'start', 
+			$t['Tournament']['id']
+		), array(
+			'class' => 'actions',
+			'target' => '_blank'
+		)); ?>
 		<table cellpadding = "0" cellspacing = "0">
 		<tr>
 			<th style="width:20%"><?php echo __('Player'); ?></th>

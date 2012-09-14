@@ -135,7 +135,8 @@ class RegistrationsController extends AppController {
 			$this->Session->setFlash(__('No event set, please navigate to from an event sidebar.'));
 			$this->redirect(array('controller' => 'events', 'action' => 'index'));
 		}
-		$this->set(compact('users', 'tournaments', 'registrations'));
+		debug($tlist);
+		$this->set(compact('users', 'tournaments', 'registrations', 'tlist'));
 	}
 
 /**
