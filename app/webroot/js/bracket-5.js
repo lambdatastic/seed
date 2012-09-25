@@ -723,8 +723,8 @@
                 /* To maximize the time it takes for two teams to play against
                  * eachother twice, WB losers are assigned in reverse order
                  * every second round of LB */
-                if (r%2 === 0)
-                  winnerMatch = matches - m - 1
+                //if (r%2 === 0)
+                  //winnerMatch = matches - m - 1
                 return [{source: losers.round(r*2).match(m).winner},
                         {source: winners.round(r+1).match(winnerMatch).loser}]
               }
