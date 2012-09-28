@@ -52,7 +52,7 @@ class EventsController extends AppController {
 	public function upcoming() {
 		$this->paginate = array(
 			'conditions' => array(
-				"Event.starttime >" => date('Y-m-d h:i:s')			
+				"Event.endtime >" => date('Y-m-d h:i:s')			
 			) 
 		);
 		$this->Event->recursive = 0;
