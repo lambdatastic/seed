@@ -141,9 +141,10 @@ class Match extends AppModel {
 				$nextMatch['Match']['player2_id'] = $playerId;
 			}
 		} else {
-			$nextMatch['Match']['type'] = 'LD'	;
+			$nextMatch['Match']['type'] = 'LD';
+			$mOrder = $matchInfo['round'] - 1;
 			$nextMatch['Match']['round'] = $matchInfo['round'];
-			$nextMatch['Match']['column'] = $matchInfo['column'];
+			$nextMatch['Match']['column'] = pow(2, $mOrder) - $matchInfo['column'] + 1;
 			$nextMatch['Match']['player2_id'] = $playerId;
 		}
 		$nextMatch['Match']['tournament_id'] = $matchInfo['tournament_id'];
