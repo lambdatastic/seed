@@ -783,13 +783,13 @@
               if (_isResized === false) {
                 if (rematch) {
                   _isResized = true
-                  topCon.css('width', (parseInt(topCon.css('width'))+140)+'px')
+                  topCon.css('width', (parseInt(topCon.css('width'))+240)+'px')
                 }
               }
               if (!rematch && _isResized) {
                 _isResized = false
                 finals.dropRound()
-                topCon.css('width', (parseInt(topCon.css('width'))-140)+'px')
+                topCon.css('width', (parseInt(topCon.css('width'))-240)+'px')
               }
               return rematch
             })
