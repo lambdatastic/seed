@@ -3,6 +3,8 @@ echo $this->Html->script('bracket-5');
 echo $this->Html->css('bracket-5'); 
 ?>
 
+<h3><?php echo ($tname['Tournament']['game']) ?>
+
 <div id='brackets'>
 <script type="text/javascript" >
 var bracketData = <?php echo $this->Js->object($bData); ?>

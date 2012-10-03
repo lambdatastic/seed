@@ -104,9 +104,9 @@ class RegistrationsController extends AppController {
 
 			if ($this->Registration->save($newReg)) {
 				$this->Session->setFlash(__($user . ' has been registered.'));
-				$this->redirect(array('action' => 'add', '?' => array(
-					'event' => $this->request->query['event']
-				 )));
+				#$this->redirect(array('action' => 'add', '?' => array(
+				#	'event' => $this->request->query['event']
+				# )));
 			} else {
 				$this->Session->setFlash(__('The registration could not be saved. Please, try again.'));
 			}

@@ -144,7 +144,13 @@ class Match extends AppModel {
 			$nextMatch['Match']['type'] = 'LD';
 			$mOrder = $matchInfo['round'] - 1;
 			$nextMatch['Match']['round'] = $matchInfo['round'];
-			$nextMatch['Match']['column'] = pow(2, $mOrder) - $matchInfo['column'] + 1;
+			# Need a conditional here to determine if this is an even round and flip everyone if it is
+			debug(($order - $matchInfo['round'] - 1) % 2);
+			if (($order -$matchInfo['round'] - 1) % 2 == 0) {
+				$nextMatch['Match']['column'] = pow(2, $mOrder) - $matchInfo['column'] + 1;
+			} else {
+				$nextMatch['Match']['column'] = $matchInfo['column'];
+			}
 			$nextMatch['Match']['player2_id'] = $playerId;
 		}
 		$nextMatch['Match']['tournament_id'] = $matchInfo['tournament_id'];
