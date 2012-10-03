@@ -416,9 +416,12 @@ class TournamentsController extends AppController {
 		
 		#debug($bData);
 		
-		
-		
-		$this->set(compact('currentMatches', 'bData'));
+		$tname = $this->Tournament->find('first', array(
+			'conditions' => array('Tournament.id' => $this->Tournament->id),
+			'recursive' => -1
+		));
+		debug($tname);
+		$this->set(compact('currentMatches', 'bData', 'tname'));
 	}
 	
 	public function test ($id = null) {
