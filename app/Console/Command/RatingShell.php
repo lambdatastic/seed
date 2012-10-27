@@ -15,7 +15,7 @@ class RatingShell extends AppShell {
 			SELECT `matches`.`player1_id`, `matches`.`player2_id`, `matches`.`result`, `tournaments`.`game`, `rankings`.`user_id`, `rankings`.`rating`, `rankings`.`rd`
 			FROM  `matches` ,  `tournaments`, `rankings`
 			WHERE  `matches`.`tournament_id` =  `tournaments`.`id` 
-			AND  `completed` >  DATE_SUB(NOW(), INTERVAL 7 DAY)
+			AND  `completed` >  DATE_SUB(NOW(), INTERVAL 90 DAY)
 			AND ( `matches`.`player1_id` = `rankings`.`user_id` OR `matches`.`player2_id` = `rankings`.`user_id`)
 			AND `tournaments`.`game` = `rankings`.`game`
 			AND `matches`.`player1_id` IS NOT NULL 
@@ -32,6 +32,7 @@ class RatingShell extends AppShell {
 		$rankings = $this->Ranking->find('all');
 		
 		foreach ($rankings as $ranking) {
+			unset($matches);
 			$matches = $this->Queue->find('all', array(
 				'conditions' => array(
 					'user_id !=' => $ranking['Ranking']['user_id'],
@@ -43,6 +44,7 @@ class RatingShell extends AppShell {
 				)
 			));
 			
+			unset($matchData);
 			for ($i = 0; $i < count($matches); $i++) {
 				$matchData['rating'][$i] = $matches[$i]['Queue']['rating'];
 				$matchData['RD'][$i] = $matches[$i]['Queue']['rd'];
@@ -56,6 +58,11 @@ class RatingShell extends AppShell {
 				}
 			}
 			
+			$this->out($ranking['Ranking']['id']);
+			$this->out(print_r($matches));
+			$this->out(print_r($matchData));
+			$this->out("");
+
 			$calc = new rating($ranking['Ranking']['rating'], $ranking['Ranking']['rd'], $matchData);
 			
 			$newRank['Ranking']['id'] = $ranking['Ranking']['id'];
