@@ -294,7 +294,9 @@ class TournamentsController extends AppController {
 			),
 			'contain' => array(
 				'Player1.name',
-				'Player2.name'
+				'Player2.name',
+				'Player1.username',
+				'Player2.username'
 			)
 		));
 		#debug($winners);
@@ -310,12 +312,12 @@ class TournamentsController extends AppController {
 			if ($winner['Player1']['name'] == null) {
 				array_push($nd, 'Bye');
 			} else {
-				array_push($nd, $winner['Player1']['name']);
+				array_push($nd, $winner['Player1']['username']);
 			}
 			if ($winner['Player2']['name'] == null) {
 				array_push($nd, 'Bye');
 			} else {
-				array_push($nd, $winner['Player2']['name']);
+				array_push($nd, $winner['Player2']['username']);
 			}			
 			array_push($bData['teams'], $nd);
 		}
